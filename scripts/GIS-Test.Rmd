@@ -167,7 +167,15 @@ hotspot_sp_ee_subset_buf_wgs = spTransform(hotspot_sp_ee_subset_buf, CRS( "+proj
 plot(hotspot_sp_ee_subset_buf_wgs)
 ```
 
+```{r eval=FALSE, include=FALSE}
+hotspot2003_bu_wgs84 = st_as_sf(hotspot_sp_ee_subset_buf_wgs) 
+```
 
+## Write bounding box to shapefile
+```{r eval=FALSE, include=FALSE}
+st_write(hotspot2003_bu_wgs84, "../outputs/hotspot2003_bu_wgs84.shp", driver="ESRI Shapefile")  # create to a shapefile 
+
+```
 ```{r}
 plot(hotspot_sf_ee_subset_buf)
 ```
