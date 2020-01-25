@@ -159,6 +159,14 @@ hotspot_sf_ee_subset_buf <- st_buffer(hotspot_sf_ee_subset, dist = 1000, endCapS
 ```{r}
 plot(hotspot_sp_ee_subset_buf)
 ```
+```{r}
+hotspot_sp_ee_subset_buf_wgs = spTransform(hotspot_sp_ee_subset_buf, CRS( "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs "))
+```
+
+```{r}
+plot(hotspot_sp_ee_subset_buf_wgs)
+```
+
 
 ```{r}
 plot(hotspot_sf_ee_subset_buf)
