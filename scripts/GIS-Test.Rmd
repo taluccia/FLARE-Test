@@ -1,0 +1,127 @@
+---
+title: "GIS-test"
+author: "Anna Talucci"
+date: "1/8/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Overview
+
+What is included in this script:
+
+# Packages
+
+```{r}
+library(sp)
+library(sf)
+library(rgdal) # geospatial data
+library(raster)
+library(rgeos) # GIS Geometry
+library(foreign) # deals with dbf files
+library(dplyr)
+```
+
+# Creat Bounding Box for FLARE
+```{r}
+
+
+coords = matrix(c(118.94, 72.26,
+               171.0, 72.26,
+               171.0, 60.0, 
+               118.94, 60.0), 
+             ncol = 2, byrow = TRUE)
+
+
+P1 = Polygon(coords)
+Ps1 = SpatialPolygons(list(Polygons(list(P1), ID = "a")), proj4string=CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
+plot(Ps1, axes = TRUE)
+```
+```{r eval=FALSE, include=FALSE}
+Ps2 = st_as_sf(Ps1) 
+```
+
+## Write bounding box to shapefile
+```{r eval=FALSE, include=FALSE}
+st_write(Ps2, "../outputs/FLARE_bbox.shp", driver="ESRI Shapefile")  # create to a shapefile 
+
+```
+
+# Read in hotspot data
+```{r}
+hotspot = readOGR("../hotspot_data/DL_FIRE_M6_2003/fire_archive_2003.shp", "fire_archive_2003") 
+```
+```{r}
+str(hotspot)
+```
+```{r}
+projection(hotspot)
+```
+
+need to convert hotspot data to equal area projection in order to buffer. THis will allow to buffer by meters.
+
+```{r}
+plot(Ps1)
+plot(hotspot, add= TRUE)
+```
+
+## Equal Area projection for russia
+https://gis.stackexchange.com/questions/264093/projection-for-russia-map
+
++proj=aea +lat_1=50 +lat_2=70 +lat_0=56 +lon_0=100 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs 
+
+
+
+```{r}
+newproj = "+proj=aea +lat_1=50 +lat_2=70 +lat_0=56 +lon_0=100 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs "
+```
+
+
+
+## Reduce hotspot data to FLARE  BBox
+```{r}
+hotspot_subset <- hotspot[Ps1, ]
+```
+
+```{r eval=FALSE, include=FALSE}
+buf <- buffer(hotspot_subset, width = 1000, filename = "../outputs/buffer_hotspot_2003", dissolve = TRUE)
+```
+
+## Buffer the subsetted hotspot data
+
+width of gBuffer depends on the projection; the projection for hotspot data units of degrees 0.01 represents about 1km when in WGS 84 projection
+```{r eval=FALSE, include=FALSE}
+buf1 <- gBuffer(hotspot_subset, width = 0.01, capStyle="ROUND", joinStyle="ROUND")
+```
+
+## Write buffer to shapfirle
+
+```{r eval=FALSE, include=FALSE}
+st_write(hotspot_subset, "../outputs/Hotspots_2003.shp", driver="ESRI Shapefile")  # create to a shapefile 
+
+```
+
+#################
+```{r eval=FALSE, include=FALSE}
+hotspot_subset <- hotspot[Ps1, ]
+```
+
+
+```{r eval=FALSE, include=FALSE}
+plot(Ps1)
+plot(hotspot_subset, add= TRUE)
+```
+
+
+
+```{r eval=FALSE, include=FALSE}
+writeOGR(obj = buf, dsn = "../outputs", layer = "buffer_hotspot_2003", driver = "ESRI Shapefile")
+```
+
+```{r eval=FALSE, include=FALSE}
+plot(buf)
+```
+
