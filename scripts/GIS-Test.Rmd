@@ -15,7 +15,7 @@ What is included in this script:
 
 # Packages
 
-```{r}
+```{r include=FALSE}
 library(sp)
 library(sf)
 library(rgdal) # geospatial data
@@ -38,6 +38,9 @@ coords = matrix(c(118.94, 72.26,
 
 P1 = Polygon(coords)
 Ps1 = SpatialPolygons(list(Polygons(list(P1), ID = "a")), proj4string=CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
+```
+
+```{r}
 plot(Ps1, axes = TRUE)
 ```
 ```{r eval=FALSE, include=FALSE}
@@ -52,18 +55,18 @@ st_write(Ps2, "../outputs/FLARE_bbox.shp", driver="ESRI Shapefile")  # create to
 
 # Read in hotspot data
 ```{r}
-hotspot = readOGR("../hotspot_data/DL_FIRE_M6_2003/fire_archive_2003.shp", "fire_archive_2003") 
+hotspot = readOGR("../data/hotspot_data/DL_FIRE_M6_2003/fire_archive_2003.shp", "fire_archive_2003") 
 ```
+
+convert from sp to sf
 ```{r}
-str(hotspot)
+hotspot_sf = st_as_sf(hotspot) 
 ```
-```{r}
-projection(hotspot)
-```
+
 
 need to convert hotspot data to equal area projection in order to buffer. THis will allow to buffer by meters.
 
-```{r}
+```{r eval=FALSE, include=FALSE}
 plot(Ps1)
 plot(hotspot, add= TRUE)
 ```
@@ -79,11 +82,50 @@ https://gis.stackexchange.com/questions/264093/projection-for-russia-map
 newproj = "+proj=aea +lat_1=50 +lat_2=70 +lat_0=56 +lon_0=100 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs "
 ```
 
+```{r}
+hotspot_sf_ee = st_transform(hotspot_sf, CRS( "+proj=laea +lat_0=90 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"))
+```
 
+```{r}
+hotspot_sp_ee = spTransform(hotspot, CRS( "+proj=laea +lat_0=90 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"))
+```
+
+```{r}
+Ps1_sp_ee = spTransform(Ps1, CRS( "+proj=laea +lat_0=90 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"))
+```
+
+```{r}
+st_crs(hotspot_sf_ee)
+```
+
+```{r}
+Ps2_ee = st_transform(Ps2, CRS( "+proj=laea +lat_0=90 +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs"))
+```
+
+```{r}
+st_crs(Ps2_ee)
+```
+
+```{r}
+plot(st_crop(hotspot_sf_ee, Ps2_ee))
+
+```
 
 ## Reduce hotspot data to FLARE  BBox
+
 ```{r}
+
+```
+
+```{r}
+hotspot_sp_ee_subset <- hotspot_sp_ee[Ps1_sp_ee, ]
+```
+```{r eval=FALSE, include=FALSE}
 hotspot_subset <- hotspot[Ps1, ]
+```
+
+```{r}
+hotspot_sf_ee_subset <- hotspot_sf_ee[Ps2_ee, ]
 ```
 
 ```{r eval=FALSE, include=FALSE}
@@ -96,6 +138,32 @@ width of gBuffer depends on the projection; the projection for hotspot data unit
 ```{r eval=FALSE, include=FALSE}
 buf1 <- gBuffer(hotspot_subset, width = 0.01, capStyle="ROUND", joinStyle="ROUND")
 ```
+
+
+```{r eval=FALSE, include=FALSE}
+buf1 <- gBuffer(hotspot_subset, width = 0.01, capStyle="ROUND", joinStyle="ROUND")
+```
+
+```{r}
+st_crs(hotspot_sf_ee_subset)$units
+```
+
+```{r eval=FALSE, include=FALSE}
+hotspot_sp_ee_subset_buf <- gBuffer(hotspot_sp_ee_subset, width = 1000, capStyle="ROUND", joinStyle="ROUND")
+```
+
+```{r }
+hotspot_sf_ee_subset_buf <- st_buffer(hotspot_sf_ee_subset, dist = 1000, endCapStyle="ROUND", joinStyle="ROUND")
+```
+
+```{r}
+plot(hotspot_sp_ee_subset_buf)
+```
+
+```{r}
+plot(hotspot_sf_ee_subset_buf)
+```
+
 
 ## Write buffer to shapfirle
 
