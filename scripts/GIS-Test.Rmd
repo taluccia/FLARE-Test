@@ -25,7 +25,15 @@ library(foreign) # deals with dbf files
 library(dplyr)
 ```
 
+# Projections
+```{r}
+wgs_proj =  "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs "
+
+```
+
+
 # Creat Bounding Box for FLARE
+
 ```{r}
 
 
@@ -43,33 +51,41 @@ Ps1 = SpatialPolygons(list(Polygons(list(P1), ID = "a")), proj4string=CRS("+proj
 ```{r}
 plot(Ps1, axes = TRUE)
 ```
-```{r eval=FALSE, include=FALSE}
+```{r}
 Ps2 = st_as_sf(Ps1) 
 ```
 
 ## Write bounding box to shapefile
+
 ```{r eval=FALSE, include=FALSE}
 st_write(Ps2, "../outputs/FLARE_bbox.shp", driver="ESRI Shapefile")  # create to a shapefile 
 
 ```
 
 # Read in hotspot data
+
 ```{r}
 hotspot = readOGR("../data/hotspot_data/DL_FIRE_M6_2003/fire_archive_2003.shp", "fire_archive_2003") 
 ```
 
+
+```{r}
+head(hotspot)
+```
+
 convert from sp to sf
+
 ```{r}
 hotspot_sf = st_as_sf(hotspot) 
+```
+
+```{r}
+head(hotspot_sf)
 ```
 
 
 need to convert hotspot data to equal area projection in order to buffer. THis will allow to buffer by meters.
 
-```{r eval=FALSE, include=FALSE}
-plot(Ps1)
-plot(hotspot, add= TRUE)
-```
 
 ## Equal Area projection for russia
 https://gis.stackexchange.com/questions/264093/projection-for-russia-map
@@ -106,20 +122,15 @@ Ps2_ee = st_transform(Ps2, CRS( "+proj=laea +lat_0=90 +lon_0=0 +x_0=0 +y_0=0 +el
 st_crs(Ps2_ee)
 ```
 
-```{r}
-plot(st_crop(hotspot_sf_ee, Ps2_ee))
 
-```
 
 ## Reduce hotspot data to FLARE  BBox
 
-```{r}
-
-```
 
 ```{r}
 hotspot_sp_ee_subset <- hotspot_sp_ee[Ps1_sp_ee, ]
 ```
+
 ```{r eval=FALSE, include=FALSE}
 hotspot_subset <- hotspot[Ps1, ]
 ```
@@ -128,37 +139,78 @@ hotspot_subset <- hotspot[Ps1, ]
 hotspot_sf_ee_subset <- hotspot_sf_ee[Ps2_ee, ]
 ```
 
-```{r eval=FALSE, include=FALSE}
-buf <- buffer(hotspot_subset, width = 1000, filename = "../outputs/buffer_hotspot_2003", dissolve = TRUE)
-```
-
-## Buffer the subsetted hotspot data
-
-width of gBuffer depends on the projection; the projection for hotspot data units of degrees 0.01 represents about 1km when in WGS 84 projection
-```{r eval=FALSE, include=FALSE}
-buf1 <- gBuffer(hotspot_subset, width = 0.01, capStyle="ROUND", joinStyle="ROUND")
-```
-
 
 ```{r eval=FALSE, include=FALSE}
-buf1 <- gBuffer(hotspot_subset, width = 0.01, capStyle="ROUND", joinStyle="ROUND")
-```
-
-```{r}
 st_crs(hotspot_sf_ee_subset)$units
 ```
 
-```{r eval=FALSE, include=FALSE}
-hotspot_sp_ee_subset_buf <- gBuffer(hotspot_sp_ee_subset, width = 1000, capStyle="ROUND", joinStyle="ROUND")
-```
-
-```{r }
-hotspot_sf_ee_subset_buf <- st_buffer(hotspot_sf_ee_subset, dist = 1000, endCapStyle="ROUND", joinStyle="ROUND")
+## 1km buffer
+```{r}
+hotspot_sp_ee_subset_1k <- gBuffer(hotspot_sp_ee_subset, width = 1000, capStyle="ROUND", joinStyle="ROUND")
 ```
 
 ```{r}
-plot(hotspot_sp_ee_subset_buf)
+head(hotspot_sp_ee_subset_1k)
 ```
+
+```{r}
+plot(hotspot_sp_ee_subset_1k)
+```
+
+## Remove holes?
+```{r}
+ plot(remove.holes(hotspot_sp_ee_subset_1k))
+```
+
+```{r}
+hotspot_sp_ee_1k_noholes = remove.holes(hotspot_sp_ee_subset_1k)
+```
+
+```{r}
+hotspot_sp_1k_noholes_wgs = spTransform(hotspot_sp_ee_1k_noholes , CRS( "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs "))
+```
+
+```{r eval=FALSE, include=FALSE}
+hotspot2003_1k_wgs84_noholes = st_as_sf(hotspot_sp_1k_noholes_wgs) 
+```
+
+
+```{r eval=FALSE, include=FALSE}
+st_write(hotspot2003_1k_wgs84_noholes, "../outputs/hotspot2003_1k_wgs84_noholes.shp", driver="ESRI Shapefile")  # create to a shapefile 
+
+```
+
+
+#########################
+```{r}
+hole = s_ploy
+```
+
+```{r}
+featureNumber=1 ; ringNumber=1
+ring = SpatialPolygons(
+            list(
+              Polygons(
+                 list(
+                   hole@polygons[[featureNumber]]@Polygons[[ringNumber]]
+                  ),
+               ID=1)))
+```
+
+```{r}
+unholed = SpatialPolygonsDataFrame(ring,data=hole@data,match.ID=FALSE)
+```
+
+```{r}
+gArea(hole)
+gArea(unholed)
+```
+
+
+```{r}
+plot(unholed)
+```
+
 ```{r}
 hotspot_sp_ee_subset_buf_wgs = spTransform(hotspot_sp_ee_subset_buf, CRS( "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs "))
 ```
@@ -167,45 +219,113 @@ hotspot_sp_ee_subset_buf_wgs = spTransform(hotspot_sp_ee_subset_buf, CRS( "+proj
 plot(hotspot_sp_ee_subset_buf_wgs)
 ```
 
+
 ```{r eval=FALSE, include=FALSE}
-hotspot2003_bu_wgs84 = st_as_sf(hotspot_sp_ee_subset_buf_wgs) 
+hotspot2003_1k_wgs84 = st_as_sf(hotspot_sp_ee_subset_buf_wgs) 
+```
+
+
+```{r eval=FALSE, include=FALSE}
+st_write(hotspot2003_1k_wgs84, "../outputs/hotspot2003_1k_wgs84.shp", driver="ESRI Shapefile")  # create to a shapefile 
+
+```
+
+## 1.5km buffer
+
+```{r}
+hotspot_sp_ee_subset_buf1500 <- gBuffer(hotspot_sp_ee_subset, width = 1500, capStyle="ROUND", joinStyle="ROUND")
+```
+
+```{r}
+hotspot_sp_ee_subset_buf1500_wgs = spTransform(hotspot_sp_ee_subset_buf, CRS( wgs_proj))
+```
+
+```{r}
+plot(hotspot_sp_ee_subset_buf1500_wgs)
+```
+
+```{r}
+hotspot2003_1500m_wgs84 = st_as_sf(hotspot_sp_ee_subset_buf1500_wgs) 
 ```
 
 ## Write bounding box to shapefile
 ```{r eval=FALSE, include=FALSE}
-st_write(hotspot2003_bu_wgs84, "../outputs/hotspot2003_bu_wgs84.shp", driver="ESRI Shapefile")  # create to a shapefile 
+st_write(hotspot2003_1500m_wgs84, "../outputs/hotspot2003_1500m_wgs84.shp", driver="ESRI Shapefile")  # create to a shapefile 
 
 ```
+
+## 2k buffer 
+
 ```{r}
-plot(hotspot_sf_ee_subset_buf)
+hotspot_sp_ee_subset_buf2000 <- gBuffer(hotspot_sp_ee_subset, width = 2000, capStyle="ROUND", joinStyle="ROUND")
 ```
 
-
-## Write buffer to shapfirle
-
-```{r eval=FALSE, include=FALSE}
-st_write(hotspot_subset, "../outputs/Hotspots_2003.shp", driver="ESRI Shapefile")  # create to a shapefile 
-
+```{r}
+hotspot_sp_ee_subset_buf2000_wgs = spTransform(hotspot_sp_ee_subset_buf, CRS( wgs_proj))
 ```
 
-#################
-```{r eval=FALSE, include=FALSE}
-hotspot_subset <- hotspot[Ps1, ]
+```{r}
+plot(hotspot_sp_ee_subset_buf2000_wgs)
 ```
 
-
-```{r eval=FALSE, include=FALSE}
-plot(Ps1)
-plot(hotspot_subset, add= TRUE)
-```
-
-
-
-```{r eval=FALSE, include=FALSE}
-writeOGR(obj = buf, dsn = "../outputs", layer = "buffer_hotspot_2003", driver = "ESRI Shapefile")
+```{r}
+hotspot2003_2k_wgs84 = st_as_sf(hotspot_sp_ee_subset_buf2000_wgs) 
 ```
 
 ```{r eval=FALSE, include=FALSE}
-plot(buf)
+st_write(hotspot2003_2k_wgs84, "../outputs/hotspot2003_2k_wgs84.shp", driver="ESRI Shapefile")  # create to a shapefile 
+
 ```
+
+
+## 3k buffer 
+
+```{r}
+hotspot_sp_ee_subset_buf3k <- gBuffer(hotspot_sp_ee_subset, width = 3000, capStyle="ROUND", joinStyle="ROUND")
+```
+
+
+```{r}
+plot(hotspot_sp_ee_subset_buf3k)
+```
+
+
+
+## Spatial Transform
+```{r}
+hotspot_sp_ee_subset_buf3k_wgs = spTransform(hotspot_sp_ee_subset_buf, CRS( wgs_proj))
+```
+
+```{r}
+plot(hotspot_sp_ee_subset_buf3k_wgs)
+```
+
+```{r}
+hotspot2003_3k_wgs84 = st_as_sf(hotspot_sp_ee_subset_buf3k_wgs) 
+```
+
+
+```{r eval=FALSE, include=FALSE}
+st_write(hotspot2003_3k_wgs84, "../outputs/hotspot2003_3k_wgs84.shp", driver="ESRI Shapefile")  # create to a shapefile 
+
+```
+
+
+## 1km buffer with sf
+```{r }
+hotspot_sf_ee_subset_buf <- st_buffer(hotspot_sf_ee_subset, dist = 1000, endCapStyle="ROUND", joinStyle="ROUND")
+```
+
+```{r}
+plot(hotspot_sp_ee_subset_buf)
+```
+
+
+```{r}
+plot(hotspot_sp_ee_subset_buf_wgs)
+```
+
+
+
+
 
