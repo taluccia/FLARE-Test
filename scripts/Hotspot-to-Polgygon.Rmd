@@ -1,0 +1,110 @@
+---
+title: "Hotspot point data to polygon"
+author: "Anna Talucci"
+date: "2/6/2020"
+output: html_document
+---
+
+# Overview
+
+What is included in this script:
+
+# Packages
+
+```{r include=FALSE}
+library(sp)
+library(sf)
+library(rgdal) # geospatial data
+library(raster)
+library(rgeos) # GIS Geometry
+library(foreign) # deals with dbf files
+library(dplyr)
+```
+
+# Projections
+
+WGS 84 need for gee
+```{r}
+wgs_proj =  "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs "
+
+```
+
+Equal Area projection for russia need for buffering hotspot data
+https://gis.stackexchange.com/questions/264093/projection-for-russia-map
+
++proj=aea +lat_1=50 +lat_2=70 +lat_0=56 +lon_0=100 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs 
+
+```{r}
+ee_russia = "+proj=aea +lat_1=50 +lat_2=70 +lat_0=56 +lon_0=100 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs "
+```
+
+# Creat Bounding Box for FLARE
+
+```{r}
+
+
+coords = matrix(c(118.94, 72.26,
+               171.0, 72.26,
+               171.0, 60.0, 
+               118.94, 60.0), 
+             ncol = 2, byrow = TRUE)
+
+
+P1 = Polygon(coords)
+Ps1 = SpatialPolygons(list(Polygons(list(P1), ID = "a")), proj4string=CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
+```
+
+
+```{r}
+Ps1_sp_ee = spTransform(Ps1, CRS( ee_russia))
+```
+
+# Read in hotspot data
+
+```{r}
+hotspot = readOGR("../data/hotspot_data/DL_FIRE_M6_2003/fire_archive_2003.shp", "fire_archive_2003") 
+```
+
+
+```{r}
+head(hotspot)
+```
+
+## project to equal area russia
+```{r}
+hotspot_sp_ee = spTransform(hotspot, CRS(ee_russia))
+```
+
+## Reduce hotspot data to FLARE  BBox
+
+
+```{r}
+hotspot_sp_ee_subset <- hotspot_sp_ee[Ps1_sp_ee, ]
+```
+
+# Buffer by 3k
+```{r}
+hotspot_sp_ee_subset_buf3k <- gBuffer(hotspot_sp_ee_subset, width = 3000, capStyle="ROUND", joinStyle="ROUND")
+```
+
+## Remove holes in polygons
+```{r}
+hotspot_sp_ee_3k_noholes = remove.holes(hotspot_sp_ee_subset_buf3k)
+```
+
+## reproject to WGS for GEE
+
+```{r}
+hotspot_sp_ee_noholes_3k_wgs = spTransform(hotspot_sp_ee_3k_noholes, CRS( wgs_proj))
+```
+
+## Sp to sf
+```{r}
+hotspot2003_3k_wgs84 = st_as_sf(hotspot_sp_ee_noholes_3k_wgs) 
+```
+
+## Write to file
+```{r eval=FALSE, include=FALSE}
+st_write(hotspot2003_3k_wgs84, "../outputs/hotspot2003_3k_wgs84.shp", driver="ESRI Shapefile")  # create to a shapefile 
+
+```
