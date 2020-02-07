@@ -134,9 +134,6 @@ hs2019_ee = spTransform(hs2019, CRS(ee_russia))
 ## Reduce hotspot data to FLARE  BBox
 
 
-```{r}
-hotspot_sp_ee_subset <- hotspot_sp_ee[Ps1_sp_ee, ]
-```
 
 ```{r}
 hs2001_ee_sub = hs2001_ee[Ps1_sp_ee, ]
