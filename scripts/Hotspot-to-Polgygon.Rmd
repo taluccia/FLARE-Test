@@ -19,6 +19,7 @@ library(raster)
 library(rgeos) # GIS Geometry
 library(foreign) # deals with dbf files
 library(dplyr)
+library(spatialEco)
 ```
 
 # Projections
