@@ -1,0 +1,95 @@
+---
+title: "Clean Polygon data"
+author: "Anna Talucci"
+date: "2/25/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Overview
+
+What is included in this script:
+
+# Packages
+
+```{r include=FALSE}
+library(sp)
+library(sf)
+library(rgdal) # geospatial data
+library(raster)
+library(rgeos) # GIS Geometry
+library(foreign) # deals with dbf files
+library(dplyr)
+library(spatialEco)
+```
+
+
+# Yakutsk Bounding Box
+Long, Lat
+UL 129.9975, 63.7097
+UR 137.2975, 63.7097
+LR 137.2975, 61.3456
+LL 129.9975, 61.3456
+
+# Projections
+
+WGS 84 need for gee
+```{r}
+wgs_proj =  "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs "
+
+```
+
+Equal Area projection for russia need for buffering hotspot data
+https://gis.stackexchange.com/questions/264093/projection-for-russia-map
+
++proj=aea +lat_1=50 +lat_2=70 +lat_0=56 +lon_0=100 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs 
+
+```{r}
+ee_russia = "+proj=aea +lat_1=50 +lat_2=70 +lat_0=56 +lon_0=100 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs "
+```
+
+
+# Shapefile
+
+```{r}
+fp2003 = readOGR("../data/shapefile/2003_fires.shp", "2003_fires") 
+```
+
+```{r}
+plot(fp2003)
+```
+
+```{r}
+fp2003_nh = remove.holes(fp2003)
+```
+
+```{r}
+plot(fp2003_nh)
+```
+
+```{r}
+dim(fp2003_nh)
+fp2003_ee = spTransform(fp2003_nh, CRS(ee_russia))
+fp2003_ee = st_as_sf(fp2003_ee)
+fp2003_ee = st_cast(fp2003_ee,"POLYGON")
+dim(fp2003_ee)
+head(fp2003_ee)
+```
+```{r}
+dplyr::mutate(fp2003_ee, area_m = st_area(fp2003_ee))
+```
+
+```{r}
+fp2003_ee1 = fp2003_ee %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = st_area(fp2003_ee)) %>% dplyr::mutate(area_ha = (area_m*0.0001))
+head(fp2003_ee1)
+
+
+```
+
+```{r}
+fp2003_ee1 %>% filter(lengths(area_ha > '400[m^2]'))
+```
+
