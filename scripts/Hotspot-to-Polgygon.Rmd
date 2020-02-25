@@ -55,6 +55,9 @@ P1 = Polygon(coords)
 Ps1 = SpatialPolygons(list(Polygons(list(P1), ID = "a")), proj4string=CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"))
 ```
 
+```{r}
+plot(Ps1)
+```
 
 ```{r}
 Ps1_sp_ee = spTransform(Ps1, CRS( ee_russia))
