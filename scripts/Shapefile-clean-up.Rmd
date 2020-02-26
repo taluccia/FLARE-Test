@@ -27,12 +27,7 @@ library(spatialEco)
 ```
 
 
-# Yakutsk Bounding Box
-Long, Lat
-UL 129.9975, 63.7097
-UR 137.2975, 63.7097
-LR 137.2975, 61.3456
-LL 129.9975, 61.3456
+
 
 # Projections
 
