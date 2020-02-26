@@ -371,36 +371,150 @@ st_write(f17_wgs, "../outputs/clean-shapefile/fires2017.shp", driver="ESRI Shape
 st_write(f18_wgs, "../outputs/clean-shapefile/fires2018.shp", driver="ESRI Shapefile")  
 ```
 
-# Write to KMZ
+# Write to KML
 
 ```{r eval=FALSE, include=FALSE}
-st_write(f01_wgs, "../outputs/clean-kml/fires2001.shp", driver="KML") 
-st_write(f02_wgs, "../outputs/clean-kml/fires2002.shp", driver="KML")  
-st_write(f03_wgs, "../outputs/clean-kml/fires2003.shp", driver="KML")  
-st_write(f04_wgs, "../outputs/clean-kml/fires2004.shp", driver="KML")  
-st_write(f05_wgs, "../outputs/clean-kml/fires2005.shp", driver="KML")  
+st_write(f01_wgs, "../outputs/clean-kml/fires2001.kml", driver="KML") 
+st_write(f02_wgs, "../outputs/clean-kml/fires2002.kml", driver="KML")  
+st_write(f03_wgs, "../outputs/clean-kml/fires2003.kml", driver="KML")  
+st_write(f04_wgs, "../outputs/clean-kml/fires2004.kml", driver="KML")  
+st_write(f05_wgs, "../outputs/clean-kml/fires2005.kml", driver="KML")  
 ```
 
 ```{r eval=FALSE, include=FALSE}
-st_write(f06_wgs, "../outputs/clean-kml/fires2006.shp", driver="KML") 
-st_write(f07_wgs, "../outputs/clean-kml/fires2007.shp", driver="KML")  
-st_write(f08_wgs, "../outputs/clean-kml/fires2008.shp", driver="KML")  
-st_write(f09_wgs, "../outputs/clean-kml/fires2009.shp", driver="KML")  
-st_write(f10_wgs, "../outputs/clean-kml/fires2010.shp", driver="KML")  
-```
-
-
-```{r eval=FALSE, include=FALSE}
-st_write(f11_wgs, "../outputs/clean-kml/fires2011.shp", driver="KML") 
-st_write(f12_wgs, "../outputs/clean-kml/fires2012.shp", driver="KML")  
-st_write(f13_wgs, "../outputs/clean-kml/fires2013.shp", driver="KML")  
-st_write(f14_wgs, "../outputs/clean-kml/fires2014.shp", driver="KML")  
-st_write(f15_wgs, "../outputs/clean-kml/fires2015.shp", driver="KML")  
+st_write(f06_wgs, "../outputs/clean-kml/fires2006.kml", driver="KML") 
+st_write(f07_wgs, "../outputs/clean-kml/fires2007.kml", driver="KML")  
+st_write(f08_wgs, "../outputs/clean-kml/fires2008.kml", driver="KML")  
+st_write(f09_wgs, "../outputs/clean-kml/fires2009.kml", driver="KML")  
+st_write(f10_wgs, "../outputs/clean-kml/fires2010.kml", driver="KML")  
 ```
 
 
 ```{r eval=FALSE, include=FALSE}
-st_write(f16_wgs, "../outputs/clean-kml/fires2016.shp", driver="KML") 
-st_write(f17_wgs, "../outputs/clean-kml/fires2017.shp", driver="KML")  
-st_write(f18_wgs, "../outputs/clean-kml/fires2018.shp", driver="KML")  
+st_write(f11_wgs, "../outputs/clean-kml/fires2011.kml", driver="KML") 
+st_write(f12_wgs, "../outputs/clean-kml/fires2012.kml", driver="KML")  
+st_write(f13_wgs, "../outputs/clean-kml/fires2013.kml", driver="KML")  
+st_write(f14_wgs, "../outputs/clean-kml/fires2014.kml", driver="KML")  
+st_write(f15_wgs, "../outputs/clean-kml/fires2015.kml", driver="KML")  
+```
+
+
+```{r eval=FALSE, include=FALSE}
+st_write(f16_wgs, "../outputs/clean-kml/fires2016.kml", driver="KML") 
+st_write(f17_wgs, "../outputs/clean-kml/fires2017.kml", driver="KML")  
+st_write(f18_wgs, "../outputs/clean-kml/fires2018.kml", driver="KML")  
+```
+
+# Subset to Yakutsk BBox
+
+
+```{r}
+yak_bbox = readOGR("../data/bbox/yakutsk_bbox.shp", "yakutsk_bbox") 
+```
+
+```{r}
+plot(yak_bbox, axes = TRUE)
+```
+
+```{r warning=FALSE}
+f01_yak = st_crop(f01_wgs, yak_bbox)
+f02_yak = st_crop(f02_wgs, yak_bbox)
+f03_yak = st_crop(f03_wgs, yak_bbox)
+f04_yak = st_crop(f04_wgs, yak_bbox)
+f05_yak = st_crop(f05_wgs, yak_bbox)
+
+```
+```{r warning=FALSE}
+f06_yak = st_crop(f06_wgs, yak_bbox)
+f07_yak = st_crop(f07_wgs, yak_bbox)
+f08_yak = st_crop(f08_wgs, yak_bbox)
+f09_yak = st_crop(f09_wgs, yak_bbox)
+f10_yak = st_crop(f10_wgs, yak_bbox)
+```
+
+```{r warning=FALSE}
+f11_yak = st_crop(f11_wgs, yak_bbox)
+f12_yak = st_crop(f12_wgs, yak_bbox)
+f13_yak = st_crop(f13_wgs, yak_bbox)
+f14_yak = st_crop(f14_wgs, yak_bbox)
+f15_yak = st_crop(f15_wgs, yak_bbox)
+```
+
+```{r warning=FALSE}
+f16_yak = st_crop(f16_wgs, yak_bbox)
+f17_yak = st_crop(f17_wgs, yak_bbox)
+f18_yak = st_crop(f18_wgs, yak_bbox)
+```
+
+```{r}
+plot(yak_bbox, axes = TRUE)
+plot(f01_yak, add=TRUE)
+```
+
+# Write to shapefile
+
+```{r eval=FALSE, warning=FALSE, include=FALSE}
+st_write(f01_yak, "../outputs/yakutsk-shape/fires2001.shp", driver="ESRI Shapefile") 
+st_write(f02_yak, "../outputs/yakutsk-shape/fires2002.shp", driver="ESRI Shapefile")  
+st_write(f03_yak, "../outputs/yakutsk-shape/fires2003.shp", driver="ESRI Shapefile")  
+st_write(f04_yak, "../outputs/yakutsk-shape/fires2004.shp", driver="ESRI Shapefile")  
+st_write(f05_yak, "../outputs/yakutsk-shape/fires2005.shp", driver="ESRI Shapefile")  
+```
+
+```{r eval=FALSE, warning=FALSE, include=FALSE}
+st_write(f06_yak, "../outputs/yakutsk-shape/fires2006.shp", driver="ESRI Shapefile") 
+st_write(f07_yak, "../outputs/yakutsk-shape/fires2007.shp", driver="ESRI Shapefile")  
+st_write(f08_yak, "../outputs/yakutsk-shape/fires2008.shp", driver="ESRI Shapefile")  
+st_write(f09_yak, "../outputs/yakutsk-shape/fires2009.shp", driver="ESRI Shapefile")  
+st_write(f10_yak, "../outputs/yakutsk-shape/fires2010.shp", driver="ESRI Shapefile")  
+```
+
+
+```{r eval=FALSE, warning=FALSE, include=FALSE}
+st_write(f11_yak, "../outputs/yakutsk-shape/fires2011.shp", driver="ESRI Shapefile") 
+st_write(f12_yak, "../outputs/yakutsk-shape/fires2012.shp", driver="ESRI Shapefile")  
+st_write(f13_yak, "../outputs/yakutsk-shape/fires2013.shp", driver="ESRI Shapefile")  
+st_write(f14_yak, "../outputs/yakutsk-shape/fires2014.shp", driver="ESRI Shapefile")  
+st_write(f15_yak, "../outputs/yakutsk-shape/fires2015.shp", driver="ESRI Shapefile")  
+```
+
+
+```{r eval=FALSE, warning=FALSE, include=FALSE}
+st_write(f16_yak, "../outputs/yakutsk-shape/fires2016.shp", driver="ESRI Shapefile") 
+st_write(f17_yak, "../outputs/yakutsk-shape/fires2017.shp", driver="ESRI Shapefile")  
+st_write(f18_yak, "../outputs/yakutsk-shape/fires2018.shp", driver="ESRI Shapefile")  
+```
+
+# Write to KML
+
+```{r eval=FALSE, include=FALSE}
+st_write(f01_yak, "../outputs/yakutsk-kml/fires2001.kml", driver="KML") 
+st_write(f02_yak, "../outputs/yakutsk-kml/fires2002.kml", driver="KML")  
+st_write(f03_yak, "../outputs/yakutsk-kml/fires2003.kml", driver="KML")  
+st_write(f04_yak, "../outputs/yakutsk-kml/fires2004.kml", driver="KML")  
+st_write(f05_yak, "../outputs/yakutsk-kml/fires2005.kml", driver="KML")  
+```
+
+```{r eval=FALSE, include=FALSE}
+st_write(f06_yak, "../outputs/yakutsk-kml/fires2006.kml", driver="KML") 
+st_write(f07_yak, "../outputs/yakutsk-kml/fires2007.kml", driver="KML")  
+st_write(f08_yak, "../outputs/yakutsk-kml/fires2008.kml", driver="KML")  
+st_write(f09_yak, "../outputs/yakutsk-kml/fires2009.kml", driver="KML")  
+st_write(f10_yak, "../outputs/yakutsk-kml/fires2010.kml", driver="KML")  
+```
+
+
+```{r eval=FALSE, include=FALSE}
+st_write(f11_yak, "../outputs/yakutsk-kml/fires2011.kml", driver="KML") 
+st_write(f12_yak, "../outputs/yakutsk-kml/fires2012.kml", driver="KML")  
+st_write(f13_yak, "../outputs/yakutsk-kml/fires2013.kml", driver="KML")  
+st_write(f14_yak, "../outputs/yakutsk-kml/fires2014.kml", driver="KML")  
+st_write(f15_yak, "../outputs/yakutsk-kml/fires2015.kml", driver="KML")  
+```
+
+
+```{r eval=FALSE, include=FALSE}
+st_write(f16_yak, "../outputs/yakutsk-kml/fires2016.kml", driver="KML") 
+st_write(f17_yak, "../outputs/yakutsk-kml/fires2017.kml", driver="KML")  
+st_write(f18_yak, "../outputs/yakutsk-kml/fires2018.kml", driver="KML")  
 ```
