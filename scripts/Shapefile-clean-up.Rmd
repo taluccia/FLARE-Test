@@ -233,34 +233,34 @@ head(f03_sf)
 - Year of the burn, fire_yr
 
 ```{r}
-f01_at = f01_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(fp2003_ee),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2001) 
-f02_at = f02_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(fp2003_ee),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2002) 
-f03_at = f03_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(fp2003_ee),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2003) 
-f04_at = f04_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(fp2003_ee),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2004) 
-f05_at = f05_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(fp2003_ee),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2005) 
+f01_at = f01_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(f01_sf),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2001) 
+f02_at = f02_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(f02_sf),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2002) 
+f03_at = f03_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(f03_sf),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2003) 
+f04_at = f04_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(f04_sf),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2004) 
+f05_at = f05_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(f05_sf),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2005) 
 ```
 
 ```{r}
-f06_at = f06_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(fp2003_ee),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2006) 
-f07_at = f07_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(fp2003_ee),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2007) 
-f08_at = f08_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(fp2003_ee),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2008) 
-f09_at = f09_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(fp2003_ee),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2009) 
-f10_at = f10_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(fp2003_ee),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2010) 
+f06_at = f06_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(f06_sf),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2006) 
+f07_at = f07_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(f07_sf),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2007) 
+f08_at = f08_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(f08_sf),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2008) 
+f09_at = f09_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(f09_sf),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2009) 
+f10_at = f10_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(f10_sf),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2010) 
 ```
 
 
 ```{r}
-f11_at = f11_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(fp2003_ee),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2011) 
-f12_at = f12_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(fp2003_ee),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2012) 
-f13_at = f13_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(fp2003_ee),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2013) 
-f14_at = f14_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(fp2003_ee),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2014) 
-f15_at = f15_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(fp2003_ee),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2015) 
+f11_at = f11_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(f11_sf),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2011) 
+f12_at = f12_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(f12_sf),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2012) 
+f13_at = f13_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(f13_sf),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2013) 
+f14_at = f14_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(f14_sf),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2014) 
+f15_at = f15_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(f15_sf),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2015) 
 ```
 
 ```{r}
-f16_at = f16_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(fp2003_ee),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2016) 
-f17_at = f17_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(fp2003_ee),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2017) 
-f18_at = f18_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(fp2003_ee),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2018) 
+f16_at = f16_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(f16_sf),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2016) 
+f17_at = f17_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(f17_sf),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2017) 
+f18_at = f18_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(f18_sf),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2018) 
 ```
 
 ```{r}
@@ -344,7 +344,7 @@ f18_wgs = st_transform(f18_ha, CRS( wgs_proj))
 
 # Write to shapefile
 
-```{r}
+```{r eval=FALSE, include=FALSE}
 st_write(f01_wgs, "../outputs/clean-shapefile/fires2001.shp", driver="ESRI Shapefile") 
 st_write(f02_wgs, "../outputs/clean-shapefile/fires2002.shp", driver="ESRI Shapefile")  
 st_write(f03_wgs, "../outputs/clean-shapefile/fires2003.shp", driver="ESRI Shapefile")  
@@ -352,7 +352,7 @@ st_write(f04_wgs, "../outputs/clean-shapefile/fires2004.shp", driver="ESRI Shape
 st_write(f05_wgs, "../outputs/clean-shapefile/fires2005.shp", driver="ESRI Shapefile")  
 ```
 
-```{r}
+```{r eval=FALSE, include=FALSE}
 st_write(f06_wgs, "../outputs/clean-shapefile/fires2006.shp", driver="ESRI Shapefile") 
 st_write(f07_wgs, "../outputs/clean-shapefile/fires2007.shp", driver="ESRI Shapefile")  
 st_write(f08_wgs, "../outputs/clean-shapefile/fires2008.shp", driver="ESRI Shapefile")  
@@ -361,7 +361,7 @@ st_write(f10_wgs, "../outputs/clean-shapefile/fires2010.shp", driver="ESRI Shape
 ```
 
 
-```{r}
+```{r eval=FALSE, include=FALSE}
 st_write(f11_wgs, "../outputs/clean-shapefile/fires2011.shp", driver="ESRI Shapefile") 
 st_write(f12_wgs, "../outputs/clean-shapefile/fires2012.shp", driver="ESRI Shapefile")  
 st_write(f13_wgs, "../outputs/clean-shapefile/fires2013.shp", driver="ESRI Shapefile")  
@@ -370,7 +370,7 @@ st_write(f15_wgs, "../outputs/clean-shapefile/fires2015.shp", driver="ESRI Shape
 ```
 
 
-```{r}
+```{r eval=FALSE, include=FALSE}
 st_write(f16_wgs, "../outputs/clean-shapefile/fires2016.shp", driver="ESRI Shapefile") 
 st_write(f17_wgs, "../outputs/clean-shapefile/fires2017.shp", driver="ESRI Shapefile")  
 st_write(f18_wgs, "../outputs/clean-shapefile/fires2018.shp", driver="ESRI Shapefile")  
@@ -378,7 +378,7 @@ st_write(f18_wgs, "../outputs/clean-shapefile/fires2018.shp", driver="ESRI Shape
 
 # Write to KMZ
 
-```{r}
+```{r eval=FALSE, include=FALSE}
 st_write(f01_wgs, "../outputs/clean-kml/fires2001.shp", driver="KML") 
 st_write(f02_wgs, "../outputs/clean-kml/fires2002.shp", driver="KML")  
 st_write(f03_wgs, "../outputs/clean-kml/fires2003.shp", driver="KML")  
@@ -386,7 +386,7 @@ st_write(f04_wgs, "../outputs/clean-kml/fires2004.shp", driver="KML")
 st_write(f05_wgs, "../outputs/clean-kml/fires2005.shp", driver="KML")  
 ```
 
-```{r}
+```{r eval=FALSE, include=FALSE}
 st_write(f06_wgs, "../outputs/clean-kml/fires2006.shp", driver="KML") 
 st_write(f07_wgs, "../outputs/clean-kml/fires2007.shp", driver="KML")  
 st_write(f08_wgs, "../outputs/clean-kml/fires2008.shp", driver="KML")  
@@ -395,7 +395,7 @@ st_write(f10_wgs, "../outputs/clean-kml/fires2010.shp", driver="KML")
 ```
 
 
-```{r}
+```{r eval=FALSE, include=FALSE}
 st_write(f11_wgs, "../outputs/clean-kml/fires2011.shp", driver="KML") 
 st_write(f12_wgs, "../outputs/clean-kml/fires2012.shp", driver="KML")  
 st_write(f13_wgs, "../outputs/clean-kml/fires2013.shp", driver="KML")  
@@ -404,7 +404,7 @@ st_write(f15_wgs, "../outputs/clean-kml/fires2015.shp", driver="KML")
 ```
 
 
-```{r}
+```{r eval=FALSE, include=FALSE}
 st_write(f16_wgs, "../outputs/clean-kml/fires2016.shp", driver="KML") 
 st_write(f17_wgs, "../outputs/clean-kml/fires2017.shp", driver="KML")  
 st_write(f18_wgs, "../outputs/clean-kml/fires2018.shp", driver="KML")  
