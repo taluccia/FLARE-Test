@@ -75,7 +75,7 @@ plot(flare_poly, axes = TRUE)
 ```
 
 ```{r}
-plot(flare_poly, axes = TRUE)
+plot(yak_poly, axes = TRUE)
 ```
 
 ## Convertfrom sp to sf
@@ -88,6 +88,6 @@ yak_sf = st_as_sf(yak_poly)
 ## Write bounding box to shapefile
 
 ```{r eval=FALSE, include=FALSE}
-st_write(Ps2, "../outputs/FLARE_bbox.shp", driver="ESRI Shapefile")  # create to a shapefile 
-
+st_write(flare_sf, "../outputs/bbox/FLARE_bbox.shp", driver="ESRI Shapefile")  # create to a shapefile 
+st_write(yak_sf, "../outputs/bbox/yakutsk_bbox.shp", driver="ESRI Shapefile")
 ```
