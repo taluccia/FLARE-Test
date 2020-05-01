@@ -23,9 +23,31 @@ library(raster)
 library(rgeos) # GIS Geometry
 library(foreign) # deals with dbf files
 library(dplyr)
+library(ggplot2)
 ```
 
+# Define graph Theme and color Palette 
+```{r}
+lb_theme = theme_bw() + theme(legend.position = "bottom") +  
+  theme(panel.grid.major = element_blank()) +
+    theme(axis.title.y = element_text(size = 11, hjust = 0.5, vjust = 1.1),
+        axis.text.x = element_text(size = 10, color = "black"),
+        axis.text.y = element_text(size = 10, color = "black"),
+        axis.line = element_line(colour = "black"))
+```
 
+```{r}
+comp_theme = theme_bw() + theme(legend.position = "none") +  
+  theme(panel.grid.major = element_blank()) +
+    theme(axis.title.y = element_text(size = 11, hjust = 0.5, vjust = 1.1),
+        axis.text.x = element_text(size = 10, color = "black"),
+        axis.text.y = element_text(size = 10, color = "black"),
+        axis.line = element_line(colour = "black"))
+```
+
+```{r}
+cbbPalette <- c("#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+```
 
 # Data 
 
@@ -177,3 +199,128 @@ d9_18 = rbind(d9_12, d13_18)
 d5_18 = rbind(d5_8, d9_18) 
 d1_18 = rbind(d1_4, d5_18) 
 ```
+
+```{r}
+head(d1_18)
+```
+
+
+```{r}
+fire_frq = d1_18 %>% count(fire_yr, name='n_fires')
+fire_frq = as.data.frame(fire_frq)
+```
+
+
+```{r}
+ggplot(fire_frq, aes(fire_yr, n_fires)) +
+  geom_bar(stat="identity", width = 0.5, fill="tomato2") +
+  xlab('Year') +
+  ylab("Fire frequency (count)") +
+  comp_theme + 
+      theme(axis.text.x = element_text(angle=65, vjust=0.6)) 
+
+```
+
+```{r}
+head(d1_18)
+```
+
+```{r}
+fire_area = d1_18 %>% group_by(fire_yr) %>%
+  summarise(total_area_ha = sum(area_ha))
+fire_area = as.data.frame(fire_area)
+fire_area
+```
+
+```{r}
+ggplot(fire_area, aes(fire_yr, total_area_ha)) +
+  geom_bar(stat="identity", width = 0.5, fill="tomato2") + 
+      labs(title="Area burned") +
+  xlab('Year') +
+  scale_y_continuous(name = ('Area burned (millions of hectares)'), breaks=c(0, 2000000, 4000000, 6000000), labels = c(0, 2, 4, 6)) + 
+  comp_theme + theme(axis.text.x = element_text(angle=65, vjust=0.6)) 
+```
+
+
+
+Fire Size classes in hectares
+- 400-999
+- 1,000 - 1,999
+- 2,000 - 4,999
+- 5,000 - 9,999
+- 10,000 - 19,999
+- 20,000 - 49,999
+- 50,000 - 99,999
+- 100,000 +
+
+```{r}
+head(d1_18)
+```
+
+```{r}
+d1_18 %>% mutate(area_ha_round = round(area_ha, 0))
+```
+
+
+```{r}
+
+fire_class = d1_18  %>% mutate(area_ha_round = round(area_ha, 0)) %>% 
+  mutate(fire_size_class = ifelse(area_ha_round %in% 400:999, "1",
+                                     ifelse(area_ha_round %in% 1000:1999, "2",
+                                            ifelse(area_ha_round %in% 2000:4999, "3",
+                                                   ifelse(area_ha_round %in% 5000:9999, "4",
+                                                          ifelse(area_ha_round %in% 10000:19999, "5",
+                                                                 ifelse(area_ha_round %in% 20000:49999, "6",
+                                                   ifelse(area_ha_round %in% 50000:99999, "7", "8"))))))))
+
+fire_class
+```
+
+```{r}
+fire_class_ct = fire_class %>% count(fire_size_class, name='count')
+fire_class_ct = as.data.frame(fire_class_ct)
+fire_class_ct
+```
+
+```{r}
+ggplot(fire_class_ct, aes(fire_size_class, count)) +
+  geom_bar(stat="identity", width = 0.5, fill="tomato2") + 
+      labs(title="Fire Size Class") +
+  xlab('Fire Size Class')  +
+  ylab("Frequency") +
+  comp_theme + theme(axis.text.x = element_text(vjust=0.6)) 
+```
+
+
+
+
+scale_fill_brewer(palette = "Spectral")
+
+- 400-999
+- 1,000-1,999
+- 2,000-4,999
+- 5,000-9,999
+- 10,000-19,999
+- 20,000-49,999
+- 50,000-99,999
+- 100,000 +
+
+```{r}
+ggplot(fire_class, aes(fire_yr)) +scale_fill_brewer(palette = "Spectral") +
+      geom_bar(aes(fill=fire_size_class), width = 0.5) + 
+  xlab("Fire year") +
+  ylab("Frequency") +
+
+  theme_bw() + theme(legend.position = "bottom") +  
+    scale_fill_brewer(palette = "Spectral", name = "Fire size class", labels = c("400-999", "1,000-1,999", "2,000-4,999", "5,000-9,999", "10,000-19,999", "20,000-49,999", "50,000-99,999", "100,000 +")) +
+  theme(panel.grid.major = element_blank()) +
+    theme(axis.title.y = element_text(size = 11, hjust = 0.5, vjust = 1.1),
+        axis.text.x = element_text(size = 10, color = "black"),
+        axis.text.y = element_text(size = 10, color = "black"),
+        axis.line = element_line(colour = "black")) +
+  theme(axis.text.x = element_text(angle=65, vjust=0.6)) 
+```
+
+
+
+
