@@ -1,0 +1,69 @@
+---
+title: "Area burned"
+author: "Anna Talucci"
+date: "5/1/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Overview
+
+
+# Packages
+
+
+```{r include=FALSE}
+library(sp)
+library(sf)
+library(rgdal) # geospatial data
+library(raster)
+library(rgeos) # GIS Geometry
+library(foreign) # deals with dbf files
+library(dplyr)
+```
+
+
+
+# Data 
+
+Read in shape files
+
+
+```{r}
+f01 = st_read("../data/clean-shapefile/fires2001.shp", "fires2001") 
+f02 = st_read("../data/clean-shapefile/fires2002.shp", "fires2002") 
+f03 = st_read("../data/clean-shapefile/fires2003.shp", "fires2003")
+f04 = st_read("../data/clean-shapefile/fires2004.shp", "fires2004") 
+f05 = st_read("../data/clean-shapefile/fires2005.shp", "fires2005") 
+```
+
+```{r}
+f06 = st_read("../data/clean-shapefile/fires2006.shp", "fires2006") 
+f07 = st_read("../data/clean-shapefile/fires2007.shp", "fires2007") 
+f08 = st_read("../data/clean-shapefile/fires2008.shp", "fires2008")
+f09 = st_read("../data/clean-shapefile/fires2009.shp", "fires2009") 
+f10 = st_read("../data/clean-shapefile/fires2010.shp", "fires2010") 
+```
+
+```{r}
+f11 = st_read("../data/clean-shapefile/fires2011.shp", "fires2011") 
+f12 = st_read("../data/clean-shapefile/fires2012.shp", "fires2012") 
+f13 = st_read("../data/clean-shapefile/fires2013.shp", "fires2013")
+f14 = st_read("../data/clean-shapefile/fires2014.shp", "fires2014") 
+f15 = st_read("../data/clean-shapefile/fires2015.shp", "fires2015") 
+```
+
+```{r}
+f16 = st_read("../data/clean-shapefile/fires2016.shp", "fires2016") 
+f17 = st_read("../data/clean-shapefile/fires2017.shp", "fires2017") 
+f18 = st_read("../data/clean-shapefile/fires2018.shp", "fires2018")
+```
+
+
+```{r}
+head(f18)
+```
+
