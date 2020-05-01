@@ -67,3 +67,113 @@ f18 = st_read("../data/clean-shapefile/fires2018.shp", "fires2018")
 head(f18)
 ```
 
+
+
+
+# Data prep
+- pull attributes out into a data frame
+- create unique id [e.g. mutate(ID =  paste(site, burn_year, transect, plot, sep = '_'))]
+- combine all data tables
+
+```{r}
+st_geometry(f01) <- NULL
+st_geometry(f02) <- NULL
+st_geometry(f03) <- NULL
+st_geometry(f04) <- NULL
+st_geometry(f05) <- NULL
+st_geometry(f06) <- NULL
+st_geometry(f07) <- NULL
+st_geometry(f08) <- NULL
+st_geometry(f09) <- NULL
+st_geometry(f10) <- NULL
+st_geometry(f11) <- NULL
+st_geometry(f12) <- NULL
+st_geometry(f13) <- NULL
+st_geometry(f14) <- NULL
+st_geometry(f15) <- NULL
+st_geometry(f16) <- NULL
+st_geometry(f17) <- NULL
+st_geometry(f18) <- NULL
+```
+
+```{r}
+head(f18)
+```
+
+```{r}
+f01_df = as.data.frame(f01)
+f02_df = as.data.frame(f02)
+f03_df = as.data.frame(f03)
+f04_df = as.data.frame(f04)
+f05_df = as.data.frame(f05)
+f06_df = as.data.frame(f06)
+f07_df = as.data.frame(f07)
+f08_df = as.data.frame(f08)
+f09_df = as.data.frame(f09)
+f10_df = as.data.frame(f10)
+f11_df = as.data.frame(f11)
+f12_df = as.data.frame(f12)
+f13_df = as.data.frame(f13)
+f14_df = as.data.frame(f14)
+f15_df = as.data.frame(f15)
+f16_df = as.data.frame(f16)
+f17_df = as.data.frame(f17)
+f18_df = as.data.frame(f18)
+```
+
+
+```{r}
+f01_uni = f01_df %>% mutate(fire_ID =  paste(fire_yr, "ru", ID_obj, sep = '_'))
+f02_uni = f02_df %>% mutate(fire_ID =  paste(fire_yr, "ru", ID_obj, sep = '_'))
+f03_uni = f03_df %>% mutate(fire_ID =  paste(fire_yr, "ru", ID_obj, sep = '_'))
+f04_uni = f04_df %>% mutate(fire_ID =  paste(fire_yr, "ru", ID_obj, sep = '_'))
+f05_uni = f05_df %>% mutate(fire_ID =  paste(fire_yr, "ru", ID_obj, sep = '_'))
+f06_uni = f06_df %>% mutate(fire_ID =  paste(fire_yr, "ru", ID_obj, sep = '_'))
+f07_uni = f07_df %>% mutate(fire_ID =  paste(fire_yr, "ru", ID_obj, sep = '_'))
+f08_uni = f08_df %>% mutate(fire_ID =  paste(fire_yr, "ru", ID_obj, sep = '_'))
+f09_uni = f09_df %>% mutate(fire_ID =  paste(fire_yr, "ru", ID_obj, sep = '_'))
+f10_uni = f10_df %>% mutate(fire_ID =  paste(fire_yr, "ru", ID_obj, sep = '_'))
+f11_uni = f11_df %>% mutate(fire_ID =  paste(fire_yr, "ru", ID_obj, sep = '_'))
+f12_uni = f12_df %>% mutate(fire_ID =  paste(fire_yr, "ru", ID_obj, sep = '_'))
+f13_uni = f13_df %>% mutate(fire_ID =  paste(fire_yr, "ru", ID_obj, sep = '_'))
+f14_uni = f14_df %>% mutate(fire_ID =  paste(fire_yr, "ru", ID_obj, sep = '_'))
+f15_uni = f15_df %>% mutate(fire_ID =  paste(fire_yr, "ru", ID_obj, sep = '_'))
+f16_uni = f16_df %>% mutate(fire_ID =  paste(fire_yr, "ru", ID_obj, sep = '_'))
+f17_uni = f17_df %>% mutate(fire_ID =  paste(fire_yr, "ru", ID_obj, sep = '_'))
+f18_uni = f18_df %>% mutate(fire_ID =  paste(fire_yr, "ru", ID_obj, sep = '_'))
+```
+
+
+```{r}
+head(f01_uni)
+head(f18_uni)
+```
+
+```{r}
+f01_uni
+f02_uni
+```
+
+
+```{r}
+c01_02 = rbind(f01_uni, f02_uni)
+c03_04 = rbind(f03_uni, f04_uni)
+c05_06 = rbind(f05_uni, f06_uni)
+c07_08 = rbind(f07_uni, f08_uni)
+c09_10 = rbind(f09_uni, f10_uni)
+c11_12 = rbind(f11_uni, f12_uni)
+c13_14 = rbind(f13_uni, f14_uni)
+c15_16 = rbind(f15_uni, f16_uni)
+c17_18 = rbind(f17_uni, f18_uni)
+```
+
+```{r}
+d1_4 = rbind(c01_02, c03_04)
+d5_8 = rbind(c05_06, c07_08)
+d9_12 = rbind(c09_10, c11_12)
+d13_16 = rbind(c13_14, c15_16)
+d13_18 = rbind(d13_16, c17_18)
+d9_18 = rbind(d9_12, d13_18) 
+d5_18 = rbind(d5_8, d9_18) 
+d1_18 = rbind(d1_4, d5_18) 
+```
