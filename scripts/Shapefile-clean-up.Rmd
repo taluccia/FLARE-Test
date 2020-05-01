@@ -178,7 +178,6 @@ f15_sf = st_as_sf(f15_nh)
 f16_sf = st_as_sf(f16_nh)
 f17_sf = st_as_sf(f17_nh)
 f18_sf = st_as_sf(f18_nh)
-
 ```
 
 
