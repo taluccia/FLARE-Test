@@ -24,6 +24,7 @@ library(rgeos) # GIS Geometry
 library(foreign) # deals with dbf files
 library(dplyr)
 library(ggplot2)
+library(cowplot)
 ```
 
 # Define graph Theme and color Palette 
@@ -212,13 +213,25 @@ fire_frq = as.data.frame(fire_frq)
 
 
 ```{r}
-ggplot(fire_frq, aes(fire_yr, n_fires)) +
+plot_frq = ggplot(fire_frq, aes(fire_yr, n_fires)) +
   geom_bar(stat="identity", width = 0.5, fill="tomato2") +
   xlab('Year') +
   ylab("Fire frequency (count)") +
   comp_theme + 
       theme(axis.text.x = element_text(angle=65, vjust=0.6)) 
 
+plot_frq
+```
+
+```{r}
+plot_frq_line = ggplot(fire_frq, aes(x=fire_yr, y=n_fires)) +
+  geom_line(color = "grey" , size=2) +
+  xlab('') +
+  ylab("Fire frequency \n(count)") +
+  comp_theme + 
+      theme(axis.text.x = element_text(angle=65, vjust=0.6)) 
+
+plot_frq_line
 ```
 
 ```{r}
@@ -233,13 +246,37 @@ fire_area
 ```
 
 ```{r}
-ggplot(fire_area, aes(fire_yr, total_area_ha)) +
-  geom_bar(stat="identity", width = 0.5, fill="tomato2") + 
-      labs(title="Area burned") +
-  xlab('Year') +
-  scale_y_continuous(name = ('Area burned (millions of hectares)'), breaks=c(0, 2000000, 4000000, 6000000), labels = c(0, 2, 4, 6)) + 
+plot_area = ggplot(fire_area, aes(fire_yr, total_area_ha)) +
+  geom_bar(stat="identity", width = 0.5, fill="tomato2") +
+  scale_y_continuous(name = ('Area burned \n(millions of hectares)'), breaks=c(0, 2000000, 4000000, 6000000), labels = c(0, 2, 4, 6)) + 
+  xlab('') +
   comp_theme + theme(axis.text.x = element_text(angle=65, vjust=0.6)) 
+
+plot_area
 ```
+
+```{r}
+head(fire_area)
+head(fire_frq)
+```
+
+
+```{r}
+fire_area_frq = merge(fire_area, fire_frq, by="fire_yr")
+fire_area_frq
+```
+
+
+```{r eval=FALSE, include=FALSE}
+ggplot(head(fire_area_frq), aes(x=fire_yr)) +
+  geom_bar( aes(y=total_area_ha), stat="identity", size=.1, fill="tomato2", alpha=.4) + 
+  geom_line( aes(y=n_fires), size=2, color="black") +
+  scale_y_continuous(name = "Area burned", sec.axis = sec_axis(name="Frequency")) 
+```
+
+
+
+
 
 
 
@@ -283,12 +320,13 @@ fire_class_ct
 ```
 
 ```{r}
-ggplot(fire_class_ct, aes(fire_size_class, count)) +
+plot_class1 = ggplot(fire_class_ct, aes(fire_size_class, count)) +
   geom_bar(stat="identity", width = 0.5, fill="tomato2") + 
       labs(title="Fire Size Class") +
   xlab('Fire Size Class')  +
   ylab("Frequency") +
   comp_theme + theme(axis.text.x = element_text(vjust=0.6)) 
+plot_class1
 ```
 
 
@@ -306,10 +344,10 @@ scale_fill_brewer(palette = "Spectral")
 - 100,000 +
 
 ```{r}
-ggplot(fire_class, aes(fire_yr)) +scale_fill_brewer(palette = "Spectral") +
+plot_class = ggplot(fire_class, aes(fire_yr)) +scale_fill_brewer(palette = "Spectral") +
       geom_bar(aes(fill=fire_size_class), width = 0.5) + 
   xlab("Fire year") +
-  ylab("Frequency") +
+  ylab("Fire frequency \n(count)") +
 
   theme_bw() + theme(legend.position = "bottom") +  
     scale_fill_brewer(palette = "Spectral", name = "Fire size class (ha)", labels = c("400-999", "1,000-1,999", "2,000-4,999", "5,000-9,999", "10,000-19,999", "20,000-49,999", "50,000-99,999", "100,000 +")) +
@@ -318,9 +356,27 @@ ggplot(fire_class, aes(fire_yr)) +scale_fill_brewer(palette = "Spectral") +
         axis.text.x = element_text(size = 10, color = "black"),
         axis.text.y = element_text(size = 10, color = "black"),
         axis.line = element_line(colour = "black")) +
-  theme(axis.text.x = element_text(angle=65, vjust=0.6)) 
+  theme(axis.text.x = element_text(angle=65, vjust=0.6)) +
+  guides(fill = guide_legend(title.position = "top"))
+
+plot_class
 ```
 
 
+bottom_row <- plot_grid(p1, p2, labels = c('B', 'C'), label_size = 12)
+p3 <- ggplot(mtcars, aes(x = qsec, y = disp)) + geom_point() + facet_wrap(~gear)
 
+plot_grid(p3, bottom_row, labels = c('A', ''), label_size = 12, ncol = 1)
+
+
+```{r fig.height=7, fig.width=6}
+
+top_row = cowplot:: plot_grid(plot_area, plot_frq_line, labels = c('A', 'B'), label_size = 12)
+grid_plot = cowplot::plot_grid(top_row, plot_class, labels = c('', 'C'), label_size = 12, ncol = 1)
+grid_plot
+```
+
+```{r eval=FALSE, include=FALSE}
+ggsave("../figures/2020-05-02_area-frequency-fireyear.png", plot = grid_plot, width = 6, height = 7, units = c("in"), dpi=600 )
+```
 
