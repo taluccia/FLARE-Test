@@ -1,0 +1,52 @@
+---
+title: "Raster-to-Point"
+author: "Anna Talucci"
+date: "6/17/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Overview
+
+# Library
+```{r}
+library(sf)
+library(sp)
+
+library(raster)
+library(rgdal)
+
+library(ggspatial)
+
+```
+
+# Raster
+
+```{r}
+dnbr2001 <- raster("../data/FLARE-dNBR/2001dNBR.tif")
+```
+
+```{r}
+dnbr2001
+```
+
+# Polygon
+
+```{r}
+fp2001 = st_read("../data/clean-shapefile/fires2001.shp") 
+```
+```{r}
+plot(dnbr2001)
+```
+```{r}
+plot(st_geometry(fp2001))
+```
+
+```{r}
+plot(dnbr2001)
+plot(st_geometry(fp2001), add=TRUE)
+```
+
