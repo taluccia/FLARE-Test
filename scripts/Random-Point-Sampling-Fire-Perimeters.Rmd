@@ -1,0 +1,91 @@
+---
+title: "Random Sampling in fire perimeters"
+author: "Anna Talucci"
+date: "6/18/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Overview
+
+Generate random points within the fire perimter polygons in order to sample individual pixels in GEE. Issue with sampling in GEE with stratified sample since it was a classified image. Issues exporting dNBR image because it is too large.
+
+
+# Packages
+```{r}
+library(sf)
+library(sp)
+library(raster)
+library(rgdal)
+library(ggspatial)
+library(dplyr)
+library(tidyr)
+library(lwgeom)
+```
+
+
+# Polygons
+
+```{r}
+fp2001 = st_read("../data/clean-shapefile/fires2001.shp") 
+fp2002 = st_read("../data/clean-shapefile/fires2002.shp")
+fp2003 = st_read("../data/clean-shapefile/fires2003.shp")
+fp2004 = st_read("../data/clean-shapefile/fires2004.shp")
+fp2005 = st_read("../data/clean-shapefile/fires2005.shp")
+```
+
+```{r}
+plot(st_geometry(fp2001))
+```
+
+```{r}
+head(fp2001)
+```
+
+
+```{r}
+summary(fp2001)
+summary(fp2002)
+summary(fp2003)
+summary(fp2004)
+summary(fp2005)
+```
+```{r}
+# RANDOM NUMBER GENERATION FOR SAMPLE
+set.seed(2357)
+#
+# the list of possible scores
+scores <- c(0, 25, 50, 75, 100)  
+# draw a sorted sample of 50 with replacement
+RandomList <- sort(sample(scores, 100, replace = TRUE))
+# print the list
+RandomList
+```
+
+```{r}
+set.seed(1)
+subset2001 = fp2001 %>% 
+  mutate(total_fires = 771) %>%
+  mutate(random = sample(771, size = nrow(fp2001), replace = FALSE)) %>%
+  filter(random <= 10) %>%
+  mutate(prct_area_1 = area_m*0.005) %>%
+  mutate(pixels_1 = round((prct_area_1/90), digits = 0))
+
+subset2001
+```
+
+```{r}
+point2001 = st_sample(subset2001, size = subset2001$pixels_1, type = "random", exact = TRUE)
+```
+```{r}
+head(point2001)
+```
+
+```{r}
+plot(st_geometry(subset2001))
+plot(point2001, add=TRUE)
+```
+
