@@ -1,0 +1,50 @@
+---
+title: "Data Visualization of Samples"
+author: "Anna Talucci"
+date: "6/19/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Overview
+
+
+
+# Pakcages
+```{r}
+library(tidyr)
+library(dplyr)
+library(stringr)
+library(ggplot2)
+```
+
+# Data
+```{r}
+pt2001 = read.csv("../data/samples/2020-06-19_burn2001_samplepoints.csv")
+```
+
+
+```{r}
+head(pt2001)
+```
+
+```{r}
+pt2001 = pt2001 %>%
+  filter(dnbr >=-100)
+```
+
+```{r}
+summary(pt2001)
+```
+
+
+# Visualization
+
+```{r}
+ggplot(data = pt2001, aes(x = rdnbr, y= dnbr)) +
+  geom_point()
+```
+
