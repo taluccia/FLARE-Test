@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Overview
-
+The goal of this script is to clean and visualize data extract from GEE.
 
 
 # Pakcages

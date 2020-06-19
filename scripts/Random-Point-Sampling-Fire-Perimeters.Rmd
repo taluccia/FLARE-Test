@@ -23,6 +23,7 @@ library(rgdal)
 library(ggspatial)
 library(dplyr)
 library(tidyr)
+library(stringr)
 library(lwgeom)
 ```
 
@@ -53,16 +54,21 @@ summary(fp2003)
 summary(fp2004)
 summary(fp2005)
 ```
+str_pad(string, width, side = c("left", "right", "both"), pad = " ")
 ```{r}
-# RANDOM NUMBER GENERATION FOR SAMPLE
-set.seed(2357)
-#
-# the list of possible scores
-scores <- c(0, 25, 50, 75, 100)  
-# draw a sorted sample of 50 with replacement
-RandomList <- sort(sample(scores, 100, replace = TRUE))
-# print the list
-RandomList
+fp2001_1 = fp2001 %>% 
+  mutate(cntry_code = 'RU') %>%
+  mutate(fire_no = str_pad(ID_obj, 4, side = "left", pad =  0)) %>%
+  mutate(fire_id = paste(cntry_code, fire_yr, fire_no, sep = '_')) %>%
+  mutate(total_fires = 771) %>% 
+  mutate(prct_area = area_m*0.0001) %>%
+  mutate(pixels = round((prct_area/90), digits = 0))
+
+fp2001_1
+```
+
+```{r}
+sum(fp2001_1$pixels)
 ```
 
 ```{r}
@@ -71,7 +77,7 @@ subset2001 = fp2001 %>%
   mutate(total_fires = 771) %>%
   mutate(random = sample(771, size = nrow(fp2001), replace = FALSE)) %>%
   filter(random <= 10) %>%
-  mutate(prct_area_1 = area_m*0.005) %>%
+  mutate(prct_area_1 = area_m*0.001) %>%
   mutate(pixels_1 = round((prct_area_1/90), digits = 0))
 
 subset2001
@@ -89,3 +95,31 @@ plot(st_geometry(subset2001))
 plot(point2001, add=TRUE)
 ```
 
+```{r}
+st_write(point2001, "../outputs/points2001.shp", driver="ESRI Shapefile") 
+```
+
+```{r}
+point2001_all = st_sample(fp2001_1, size = fp2001_1$pixels, type = "random", exact = TRUE)
+```
+
+```{r}
+point2001_all
+```
+```{r}
+pt_2001 = st_sf(point2001_all)
+```
+
+```{r}
+pt2001_all = st_join(pt_2001, fp2001_1, join = st_within)
+head(pt2001_all)
+```
+
+```{r}
+summary(pt2001_all)
+```
+
+
+```{r}
+st_write(pt2001_all, "../outputs/points2001_all.shp", driver="ESRI Shapefile") 
+```
