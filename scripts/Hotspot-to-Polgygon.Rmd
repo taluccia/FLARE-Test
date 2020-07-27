@@ -94,7 +94,8 @@ hs2015 = readOGR("../data/hotspot_data/DL_FIRE_M6_2015/fire_archive_2015.shp", "
 hs2016 = readOGR("../data/hotspot_data/DL_FIRE_M6_2016/fire_archive_2016.shp", "fire_archive_2016") 
 hs2017 = readOGR("../data/hotspot_data/DL_FIRE_M6_2017/fire_archive_2017.shp", "fire_archive_2017") 
 hs2018 = readOGR("../data/hotspot_data/DL_FIRE_M6_2018/fire_archive_2018.shp", "fire_archive_2018") 
-hs2019 = readOGR("../data/hotspot_data/DL_FIRE_M6_2019/fire_archive_2019.shp", "fire_archive_2019") 
+hs2019 = readOGR("../data/hotspot_data/DL_FIRE_M6_2019/fire_archive_2019.shp", "fire_archive_2019")
+hs2020 = readOGR("../data/hotspot_data/DL_FIRE_M6_2019/fire_archive_2020.shp", "fire_archive_2020")
  
 ```
 
@@ -131,6 +132,7 @@ hs2016_ee = spTransform(hs2016, CRS(ee_russia))
 hs2017_ee = spTransform(hs2017, CRS(ee_russia))
 hs2018_ee = spTransform(hs2018, CRS(ee_russia))
 hs2019_ee = spTransform(hs2019, CRS(ee_russia))
+hs2020_ee = spTransform(hs2020, CRS(ee_russia))
 
 ```
 
@@ -170,6 +172,7 @@ hs2016_ee_sub = hs2016_ee[Ps1_sp_ee, ]
 hs2017_ee_sub = hs2017_ee[Ps1_sp_ee, ]
 hs2018_ee_sub = hs2018_ee[Ps1_sp_ee, ]
 hs2019_ee_sub = hs2019_ee[Ps1_sp_ee, ]
+hs2020_ee_sub = hs2020_ee[Ps1_sp_ee, ]
 
 ```
 
@@ -207,6 +210,7 @@ hs2016_ee_3k = gBuffer(hs2016_ee_sub, width = 3000, capStyle="ROUND", joinStyle=
 hs2017_ee_3k = gBuffer(hs2017_ee_sub, width = 3000, capStyle="ROUND", joinStyle="ROUND")
 hs2018_ee_3k = gBuffer(hs2018_ee_sub, width = 3000, capStyle="ROUND", joinStyle="ROUND")
 hs2019_ee_3k = gBuffer(hs2019_ee_sub, width = 3000, capStyle="ROUND", joinStyle="ROUND")
+hs2020_ee_3k = gBuffer(hs2020_ee_sub, width = 3000, capStyle="ROUND", joinStyle="ROUND")
 
 ```
 
@@ -243,6 +247,7 @@ hs2016_ee_3k_nh = remove.holes(hs2016_ee_3k)
 hs2017_ee_3k_nh = remove.holes(hs2017_ee_3k)
 hs2018_ee_3k_nh = remove.holes(hs2018_ee_3k)
 hs2019_ee_3k_nh = remove.holes(hs2019_ee_3k)
+hs2020_ee_3k_nh = remove.holes(hs2020_ee_3k)
 
 ```
 
@@ -278,6 +283,7 @@ hs2016_ee_3k_wgs = spTransform(hs2016_ee_3k_nh, CRS( wgs_proj))
 hs2017_ee_3k_wgs = spTransform(hs2017_ee_3k_nh, CRS( wgs_proj))
 hs2018_ee_3k_wgs = spTransform(hs2018_ee_3k_nh, CRS( wgs_proj))
 hs2019_ee_3k_wgs = spTransform(hs2019_ee_3k_nh, CRS( wgs_proj))
+hs2020_ee_3k_wgs = spTransform(hs2020_ee_3k_nh, CRS( wgs_proj))
 ```
 
 ## Sp to sf
@@ -312,35 +318,37 @@ hs2016_3k_wgs = st_as_sf(hs2016_ee_3k_wgs)
 hs2017_3k_wgs = st_as_sf(hs2017_ee_3k_wgs)
 hs2018_3k_wgs = st_as_sf(hs2018_ee_3k_wgs)
 hs2019_3k_wgs = st_as_sf(hs2019_ee_3k_wgs)
+hs2020_3k_wgs = st_as_sf(hs2020_ee_3k_wgs)
 ```
 
 ## Write to file
 Create a shapefile
 
 ```{r eval=FALSE, include=FALSE}
-st_write(hs2001_3k_wgs, "../outputs/hotspot-buffers/hotspot2001_3k_wgs84.shp", driver="ESRI Shapefile")  
-st_write(hs2002_3k_wgs, "../outputs/hotspot-buffers/hotspot2002_3k_wgs84.shp", driver="ESRI Shapefile") 
-st_write(hs2003_3k_wgs, "../outputs/hotspot-buffers/hotspot2003_3k_wgs84.shp", driver="ESRI Shapefile") 
-st_write(hs2004_3k_wgs, "../outputs/hotspot-buffers/hotspot2004_3k_wgs84.shp", driver="ESRI Shapefile") 
-st_write(hs2005_3k_wgs, "../outputs/hotspot-buffers/hotspot2005_3k_wgs84.shp", driver="ESRI Shapefile") 
+st_write(hs2001_3k_wgs, "../outputs/hotspot-buffers/3kwgs84_hotspot_2001.shp", driver="ESRI Shapefile")  
+st_write(hs2002_3k_wgs, "../outputs/hotspot-buffers/3kwgs84_hotspot_2002.shp", driver="ESRI Shapefile") 
+st_write(hs2003_3k_wgs, "../outputs/hotspot-buffers/3kwgs84_hotspot_2003.shp", driver="ESRI Shapefile") 
+st_write(hs2004_3k_wgs, "../outputs/hotspot-buffers/3kwgs84_hotspot_2004.shp", driver="ESRI Shapefile") 
+st_write(hs2005_3k_wgs, "../outputs/hotspot-buffers/3kwgs84_hotspot_2005.shp", driver="ESRI Shapefile") 
 
-st_write(hs2006_3k_wgs, "../outputs/hotspot-buffers/hotspot2006_3k_wgs84.shp", driver="ESRI Shapefile") 
-st_write(hs2007_3k_wgs, "../outputs/hotspot-buffers/hotspot2007_3k_wgs84.shp", driver="ESRI Shapefile") 
-st_write(hs2008_3k_wgs, "../outputs/hotspot-buffers/hotspot2008_3k_wgs84.shp", driver="ESRI Shapefile") 
-st_write(hs2009_3k_wgs, "../outputs/hotspot-buffers/hotspot2009_3k_wgs84.shp", driver="ESRI Shapefile") 
-st_write(hs2010_3k_wgs, "../outputs/hotspot-buffers/hotspot2010_3k_wgs84.shp", driver="ESRI Shapefile") 
+st_write(hs2006_3k_wgs, "../outputs/hotspot-buffers/3kwgs84_hotspot_2006.shp", driver="ESRI Shapefile") 
+st_write(hs2007_3k_wgs, "../outputs/hotspot-buffers/3kwgs84_hotspot_2007.shp", driver="ESRI Shapefile") 
+st_write(hs2008_3k_wgs, "../outputs/hotspot-buffers/3kwgs84_hotspot_2008.shp", driver="ESRI Shapefile") 
+st_write(hs2009_3k_wgs, "../outputs/hotspot-buffers/3kwgs84_hotspot_2009.shp", driver="ESRI Shapefile") 
+st_write(hs2010_3k_wgs, "../outputs/hotspot-buffers/3kwgs84_hotspot_2010.shp", driver="ESRI Shapefile") 
 
 
-st_write(hs2011_3k_wgs, "../outputs/hotspot-buffers/hotspot2011_3k_wgs84.shp", driver="ESRI Shapefile")  
-st_write(hs2012_3k_wgs, "../outputs/hotspot-buffers/hotspot2012_3k_wgs84.shp", driver="ESRI Shapefile") 
-st_write(hs2013_3k_wgs, "../outputs/hotspot-buffers/hotspot2013_3k_wgs84.shp", driver="ESRI Shapefile") 
-st_write(hs2014_3k_wgs, "../outputs/hotspot-buffers/hotspot2014_3k_wgs84.shp", driver="ESRI Shapefile") 
-st_write(hs2015_3k_wgs, "../outputs/hotspot-buffers/hotspot2015_3k_wgs84.shp", driver="ESRI Shapefile") 
+st_write(hs2011_3k_wgs, "../outputs/hotspot-buffers/3kwgs84_hotspot_2011.shp", driver="ESRI Shapefile")  
+st_write(hs2012_3k_wgs, "../outputs/hotspot-buffers/3kwgs84_hotspot_2012.shp", driver="ESRI Shapefile") 
+st_write(hs2013_3k_wgs, "../outputs/hotspot-buffers/3kwgs84_hotspot_2013.shp", driver="ESRI Shapefile") 
+st_write(hs2014_3k_wgs, "../outputs/hotspot-buffers/3kwgs84_hotspot_2014.shp", driver="ESRI Shapefile") 
+st_write(hs2015_3k_wgs, "../outputs/hotspot-buffers/3kwgs84_hotspot_2015.shp", driver="ESRI Shapefile") 
 
-st_write(hs2016_3k_wgs, "../outputs/hotspot-buffers/hotspot2016_3k_wgs84.shp", driver="ESRI Shapefile") 
-st_write(hs2017_3k_wgs, "../outputs/hotspot-buffers/hotspot2017_3k_wgs84.shp", driver="ESRI Shapefile") 
-st_write(hs2018_3k_wgs, "../outputs/hotspot-buffers/hotspot2018_3k_wgs84.shp", driver="ESRI Shapefile") 
-st_write(hs2019_3k_wgs, "../outputs/hotspot-buffers/hotspot2019_3k_wgs84.shp", driver="ESRI Shapefile") 
+st_write(hs2016_3k_wgs, "../outputs/hotspot-buffers/3kwgs84_hotspot_2016.shp", driver="ESRI Shapefile") 
+st_write(hs2017_3k_wgs, "../outputs/hotspot-buffers/3kwgs84_hotspot_2017.shp", driver="ESRI Shapefile") 
+st_write(hs2018_3k_wgs, "../outputs/hotspot-buffers/3kwgs84_hotspot_2018.shp", driver="ESRI Shapefile") 
+st_write(hs2019_3k_wgs, "../outputs/hotspot-buffers/3kwgs84_hotspot_2019.shp", driver="ESRI Shapefile") 
+st_write(hs2020_3k_wgs, "../outputs/hotspot-buffers/3kwgs84_hotspot_2020.shp", driver="ESRI Shapefile") 
  
 ```
 
