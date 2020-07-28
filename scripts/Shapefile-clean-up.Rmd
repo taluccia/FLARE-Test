@@ -77,6 +77,9 @@ f15 = readOGR("../data/shapefile/2015_fires.shp", "2015_fires")
 f16 = readOGR("../data/shapefile/2016_fires.shp", "2016_fires") 
 f17 = readOGR("../data/shapefile/2017_fires.shp", "2017_fires") 
 f18 = readOGR("../data/shapefile/2018_fires.shp", "2018_fires")
+
+f19 = readOGR("../data/shapefile/2019_fires.shp", "2019_fires")
+f20 = readOGR("../data/shapefile/2020_fires.shp", "2020_fires")
  
 ```
 
@@ -115,6 +118,8 @@ f15_ee = spTransform(f15, CRS(ee_russia))
 f16_ee = spTransform(f16, CRS(ee_russia))
 f17_ee = spTransform(f17, CRS(ee_russia))
 f18_ee = spTransform(f18, CRS(ee_russia))
+f19_ee = spTransform(f19, CRS(ee_russia))
+f20_ee = spTransform(f20, CRS(ee_russia))
 ```
 
 # Remove holes inside polygons
@@ -147,6 +152,9 @@ f15_nh = remove.holes(f15_ee)
 f16_nh = remove.holes(f16_ee)
 f17_nh = remove.holes(f17_ee)
 f18_nh = remove.holes(f18_ee)
+
+f19_nh = remove.holes(f19_ee)
+f20_nh = remove.holes(f20_ee)
 ```
 
 # Convert from sp to sf
@@ -178,6 +186,10 @@ f15_sf = st_as_sf(f15_nh)
 f16_sf = st_as_sf(f16_nh)
 f17_sf = st_as_sf(f17_nh)
 f18_sf = st_as_sf(f18_nh)
+
+
+f19_sf = st_as_sf(f19_nh)
+f20_sf = st_as_sf(f20_nh)
 ```
 
 
@@ -211,6 +223,8 @@ f15_sf = st_cast(f15_sf,"POLYGON")
 f16_sf = st_cast(f16_sf,"POLYGON")
 f17_sf = st_cast(f17_sf,"POLYGON")
 f18_sf = st_cast(f18_sf,"POLYGON")
+f19_sf = st_cast(f19_sf,"POLYGON")
+f20_sf = st_cast(f20_sf,"POLYGON")
 ```
 
 ```{r}
@@ -255,6 +269,8 @@ f15_at = f15_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_
 f16_at = f16_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(f16_sf),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2016) 
 f17_at = f17_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(f17_sf),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2017) 
 f18_at = f18_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(f18_sf),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2018) 
+f19_at = f19_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(f19_sf),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2019) 
+f20_at = f20_sf %>% dplyr::mutate(ID_obj = row_number()) %>% dplyr::mutate(area_m = round(st_area(f20_sf),1)) %>% dplyr::mutate(area_ha = round(area_m*0.0001, 1)) %>% dplyr::mutate(fire_yr = 2020) 
 ```
 
 ```{r}
@@ -296,6 +312,9 @@ f16_ha = filter(f16_at, as.numeric(f16_at$area_ha) >= 400)
 f17_ha = filter(f17_at, as.numeric(f17_at$area_ha) >= 400)
 f18_ha = filter(f18_at, as.numeric(f18_at$area_ha) >= 400)
 
+f19_ha = filter(f19_at, as.numeric(f19_at$area_ha) >= 400)
+f20_ha = filter(f20_at, as.numeric(f20_at$area_ha) >= 400)
+
 ```
 
 ```{r}
@@ -334,6 +353,8 @@ f15_wgs = st_transform(f15_ha, CRS( wgs_proj))
 f16_wgs = st_transform(f16_ha, CRS( wgs_proj))
 f17_wgs = st_transform(f17_ha, CRS( wgs_proj))
 f18_wgs = st_transform(f18_ha, CRS( wgs_proj))
+f19_wgs = st_transform(f19_ha, CRS( wgs_proj))
+f20_wgs = st_transform(f20_ha, CRS( wgs_proj))
 ```
 
 # Write to shapefile
@@ -368,6 +389,9 @@ st_write(f15_wgs, "../outputs/clean-shapefile/fires2015.shp", driver="ESRI Shape
 st_write(f16_wgs, "../outputs/clean-shapefile/fires2016.shp", driver="ESRI Shapefile") 
 st_write(f17_wgs, "../outputs/clean-shapefile/fires2017.shp", driver="ESRI Shapefile")  
 st_write(f18_wgs, "../outputs/clean-shapefile/fires2018.shp", driver="ESRI Shapefile")  
+
+st_write(f19_wgs, "../outputs/clean-shapefile/fires2019.shp", driver="ESRI Shapefile") 
+st_write(f20_wgs, "../outputs/clean-shapefile/fires2020.shp", driver="ESRI Shapefile") 
 ```
 
 # Write to KML

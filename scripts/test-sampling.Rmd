@@ -1,0 +1,28 @@
+---
+title: "Test-Sampling"
+author: "Anna Talucci"
+date: "6/24/2020"
+output: html_document
+---
+
+# Overview 
+
+# Pakcages
+```{r}
+library(tidyr)
+library(dplyr)
+library(stringr)
+library(ggplot2)
+```
+
+
+# Data
+```{r}
+climate = read.csv("../data/2020-06-24_burn2001_climatetest.csv")
+```
+hhh
+```{r}
+head(climate)
+```
+
+
