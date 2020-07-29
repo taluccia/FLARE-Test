@@ -197,7 +197,7 @@ c11_12 = rbind(f11_uni, f12_uni)
 c13_14 = rbind(f13_uni, f14_uni)
 c15_16 = rbind(f15_uni, f16_uni)
 c17_18 = rbind(f17_uni, f18_uni)
-c19_20 = rbind(f19_uni, f20_uni)
+
 ```
 
 ```{r}
@@ -206,26 +206,29 @@ d5_8 = rbind(c05_06, c07_08)
 d9_12 = rbind(c09_10, c11_12)
 d13_16 = rbind(c13_14, c15_16)
 d13_18 = rbind(d13_16, c17_18)
-d13_20 = rbind(d13_18, c19_20)
-d9_20 = rbind(d9_12, d13_20) 
-d5_20 = rbind(d5_8, d9_20) 
-d1_20 = rbind(d1_4, d5_20) 
+d13_19 = rbind(d13_18, f19_uni)
+d9_19 = rbind(d9_12, d13_19) 
+d5_19 = rbind(d5_8, d9_19) 
+d1_19 = rbind(d1_4, d5_19) 
 ```
 
 ```{r}
-head(d1_20)
+head(d1_19)
+```
+```{r}
+d1_19
 ```
 
 # Summary Data
 
 ```{r}
-fire_frq = d1_20 %>% count(fire_yr, name='n_fires')
+fire_frq = d1_19 %>% count(fire_yr, name='n_fires')
 fire_frq = as.data.frame(fire_frq)
 ```
 
 
 ```{r}
-( sumdat2 = summarise( group_by(d1_20, "Fire Year" = fire_yr),
+( sumdat2 = summarise( group_by(d1_19, "Fire Year" = fire_yr),
 n = n(),
 Mean = mean(area_ha),
 SD = sd(area_ha),
@@ -235,7 +238,7 @@ Maximum = max(area_ha) ) )
 ```
 
 ```{r}
-summarise(d1_18, 
+summarise(d1_19, 
 n = n(),
 Total = sum(area_ha),
 Mean = mean(area_ha),
@@ -257,17 +260,17 @@ Fire Size classes in hectares
 8.  100,000 +
 
 ```{r}
-head(d1_18)
+head(d1_19)
 ```
 
 ```{r}
-d1_18 %>% mutate(area_ha_round = round(area_ha, 0))
+d1_19 %>% mutate(area_ha_round = round(area_ha, 0))
 ```
 
 
 ```{r}
 
-fire_class = d1_18  %>% mutate(area_ha_round = round(area_ha, 0)) %>% 
+fire_class = d1_19  %>% mutate(area_ha_round = round(area_ha, 0)) %>% 
   mutate(fire_size_class = ifelse(area_ha_round %in% 400:999, "1",
                                      ifelse(area_ha_round %in% 1000:1999, "2",
                                             ifelse(area_ha_round %in% 2000:4999, "3",
@@ -311,11 +314,11 @@ plot_frq_line
 ```
 
 ```{r}
-head(d1_18)
+head(d1_19)
 ```
 
 ```{r}
-fire_area = d1_18 %>% group_by(fire_yr) %>%
+fire_area = d1_19 %>% group_by(fire_yr) %>%
   summarise(total_area_ha = sum(area_ha))
 fire_area = as.data.frame(fire_area)
 fire_area
