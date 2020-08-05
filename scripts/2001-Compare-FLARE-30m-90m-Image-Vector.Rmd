@@ -1,0 +1,75 @@
+---
+title: "2001 Compare 30m to 90m image vector"
+author: "Anna Talucci"
+date: "8/4/2020"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Overview
+
+
+# Packages
+
+
+```{r include=FALSE}
+library(sp)
+library(sf)
+library(rgdal) # geospatial data
+library(raster)
+library(rgeos) # GIS Geometry
+library(foreign) # deals with dbf files
+library(dplyr)
+library(ggplot2)
+library(cowplot)
+```
+
+# Data 
+
+Read in shape files
+
+
+```{r}
+f30m = st_read("../data/2001_test_30_90m_climate/2001_30m_fires.shp", "2001_30m_fires") 
+f90m = st_read("../data/2001_test_30_90m_climate/2001_90m_fires.shp", "2001_90m_fires") 
+ 
+```
+
+# Data prep
+- pull attributes out into a data frame
+- create unique id [e.g. mutate(ID =  paste(site, burn_year, transect, plot, sep = '_'))]
+- combine all data tables
+
+```{r}
+st_geometry(f30m) <- NULL
+st_geometry(f90m) <- NULL
+
+```
+
+```{r}
+head(f30m)
+head(f90m)
+```
+
+```{r}
+f30m_df = as.data.frame(f30m)
+f90m_df = as.data.frame(f90m)
+
+```
+
+
+```{r}
+f30m_uni = f30m_df %>% mutate(fire_ID =  paste(fire_yr, "ru", ID_obj, sep = '_'))
+f90m_uni = f90m_df %>% mutate(fire_ID =  paste(fire_yr, "ru", ID_obj, sep = '_'))
+
+```
+
+
+```{r}
+head(f30m_uni)
+head(f90m_uni)
+```
