@@ -40,7 +40,11 @@ ee_russia = "+proj=aea +lat_1=50 +lat_2=70 +lat_0=56 +lon_0=100 +x_0=0 +y_0=0 +e
 ```
 
 # Creat Bounding Box for FLARE
-
+coords = matrix(c(118.94, 72.26,
+               171.0, 72.26,
+               171.0, 60.0, 
+               118.94, 60.0), 
+             ncol = 2, byrow = TRUE)
 ```{r}
 
 
